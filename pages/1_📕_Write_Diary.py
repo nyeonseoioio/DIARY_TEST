@@ -1,6 +1,7 @@
 import streamlit as st
 from datetime import datetime
-import pickle
+import csv
+import pandas as pd
 
 st.set_page_config(page_title="Write diary", page_icon="📝")
 def main():
@@ -9,17 +10,6 @@ def main():
 if __name__ == "__main__":
     main()
 st.sidebar.header("Write diary")
-
-# 날짜 변경 함수
-def datechange():
-    now_time = datetime.now()
-    formatted = now_time.strftime("%Y-%m-%d")
-    st.write(" **Today Date :** ",formatted)
-    with st.form("change"):
-        day = st.date_input("기록하려는 날짜 변경")
-        submitted = st.form_submit_button("Change", use_container_width=True)
-        if submitted:
-            st.write(day,"일 기준으로 작성")
 
 
 
@@ -44,13 +34,25 @@ def feelingslider():
             else:
                 st.write("**오늘 알차게 보냈군요! 수고했어요 내일도 힘내봅시다!**")
      
-        #그래프 사용
         submitted = st.form_submit_button("Submit", use_container_width=True)
         if submitted:
             st.caption("**Feeling slider 저장 완료!**")
         
 
 def Writedatediary():
+    
+    with st.form('form'):
+        st.subheader("Change date")
+        now_time = datetime.now()
+        formatted = now_time.strftime("%Y-%m-%d")
+        st.write(" **Today Date :** ",formatted)
+        selected_date = st.date_input("기록하려는 날짜 변경")
+        submitted = st.form_submit_button("Change", use_container_width=True)
+        if submitted:
+            st.write(selected_date,"일 기준으로 작성")
+        #     return selected_date
+        # return formatted
+    
     types = st.multiselect(
     label="**오늘 기분 어때?**",
     options=['😄','😍','😌','😕','😖','😭','😪','😶'],
@@ -58,28 +60,91 @@ def Writedatediary():
     )
             
     diary = st.text_input(label="**오늘의 일기를 작성해봐! :** ")
+    
     if diary:
         st.write(diary)
         st.sidebar.header("Today's Diary saved")
         st.write('**오늘의 일기 저장 완료!👍**')
-
     # 내용 저장 
     # 만약 오늘 날짜로 저장한다면 -> 날짜 변경을 안 한다면 오늘 날짜로 딕셔너리에 내용과 함께 저장
-    # diary_dict = {}
-    # while True:
-    #     if d:
+    # 사용자가 선택한 날짜 가져오기
+        diary_dict = {}
+        if selected_date == datetime.now().strftime("%Y-%m-%d"):
+            # 오늘 날짜를 선택한 경우
+            diary_dict = load_diary()
+            diary_dict[selected_date] = diary
+            save_diary(diary_dict)
+        else:
+            # 오늘 날짜를 선택하지 않은 경우
+            diary_dict = load_diary()
+            diary_dict[selected_date] = diary
+            save_diary(diary_dict)
 
-        
-    # 만약 오늘 날짜로 저장하지 않는다면 -> 변경된 날짜로 다이어리 내용 저장
             
+def load_diary():
+    try:
+        with open("diary.csv", "r", newline='', encoding='utf-8') as f:
+            reader = csv.reader(f)
+            diary_dict = {row[0]: row[1] for row in reader}
+    except FileNotFoundError:
+        diary_dict = {}
+    return diary_dict
 
-    # 기분 그래프
-            
-    # 날짜에 따라 또 다들 딕셔너리 ㄱㄱ
-            
+def save_diary(diary_dict):
+    with open("diary.csv", "w", newline='', encoding='utf-8') as f:
+        writer = csv.writer(f)
+        for key, value in diary_dict.items():
+            writer.writerow([key, value])
+
+
+
+# # 일기 불러오기
+# def search_diary(diary_dict):
+#     with st.form("p"):
+#         st.subheader("Load diary")
+#         search_diary =st.date_input("기록하려는 날짜 변경")
+#         if search_diary:
+#             with open("diary.csv","r",newline='', encoding='utf-8') as f:
+#                 reader = csv.DictReader(f)
+#                 if diary_dict[]
+                
+
+
+
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    # 기분 그래프
 
-datechange()
 
 feelingslider()
 Writedatediary()
