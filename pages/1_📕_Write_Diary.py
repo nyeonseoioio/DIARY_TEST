@@ -2,6 +2,7 @@ import streamlit as st
 from datetime import datetime
 import csv
 import pandas as pd
+import matplotlib.pyplot as plt
 
 st.set_page_config(page_title="Write diary", page_icon="📝")
 def main():
@@ -26,18 +27,18 @@ def feelingslider():
             st.write("**오늘의 내 기분 퍼센트는** ", feeling, '**% !**')
 
             if feeling <=25:
-                st.write("""오늘 힘들었군요 고생 많았어요! """)
+                st.write("**오늘 힘들었군요 고생 많았어요!**")
 
             elif feeling > 25 and feeling <=75:
                 st.write("**그럭저럭이었던 하루! 오늘 푹 자고 내일 더 힘내봅시다!**")
 
             else:
-                st.write("**오늘 알차게 보냈군요! 수고했어요 내일도 힘내봅시다!**")
+                st.write("**오늘 힘차게 보냈군요! 수고했어요 내일도 힘내봅시다!**")
      
         submitted = st.form_submit_button("Submit", use_container_width=True)
         if submitted:
             st.caption("**Feeling slider 저장 완료!**")
-        
+            return feeling
 
 def Writedatediary():
     
@@ -109,42 +110,33 @@ def save_diary(diary_dict):
 #                 if diary_dict[]
                 
 
-
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    # 기분 그래프
+# 기분 그래프
 
 
 feelingslider()
 Writedatediary()
+
+
+
+st.caption("""
+- 기분 그래프 추가할 것
+           
+- 일기 불러오기 기능 추가할 것
+           """)
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
